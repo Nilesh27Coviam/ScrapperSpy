@@ -19,8 +19,14 @@ public class AnalysisReportDAO {
     private long totalCrawlProduct;
 
     @Field(value = "COUNT_WITH_ALL_DEFINING")
-    private long longCountWithAllDefining;
+    private long countWithAllDefining;
 
     @Field(value = "DETAILED_REPORT")
     private Map detaildReport;
+
+    @Field(value = "PERCENTAGE")
+    private float percentage;
+
+    @Field(value = "TEST")
+    private String test;
 }
