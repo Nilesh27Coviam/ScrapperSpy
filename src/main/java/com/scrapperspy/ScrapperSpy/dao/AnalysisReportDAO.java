@@ -1,5 +1,8 @@
 package com.scrapperspy.ScrapperSpy.dao;
 
+import java.util.Map;
+
+
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -8,6 +11,7 @@ public class AnalysisReportDAO {
 
     @Field(value = "CATEGORY")
     private String category;
+
     @Field(value = "SOURCE")
     private String source;
 
@@ -16,4 +20,7 @@ public class AnalysisReportDAO {
 
     @Field(value = "COUNT_WITH_ALL_DEFINING")
     private long longCountWithAllDefining;
+
+    @Field(value = "DETAILED_REPORT")
+    private Map detaildReport;
 }

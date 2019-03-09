@@ -1,6 +1,8 @@
 package com.scrapperspy.ScrapperSpy.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import com.scrapperspy.ScrapperSpy.dao.GenericRegexDao;
 import com.scrapperspy.ScrapperSpy.model.GenericRegex;
 import com.scrapperspy.ScrapperSpy.repository.GenericRegexRepo;

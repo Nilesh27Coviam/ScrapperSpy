@@ -53,7 +53,8 @@ public class AnalysisExecutor implements Runnable{
     public boolean findValueInProductJson(GenericRegex genericRegex, List<String> values){
         boolean found = false;
         for(String value : values){
-            for(Pattern regex : genericRegex.getRegex()){
+            for(String regexString : genericRegex.getRegex()){
+                Pattern regex = Pattern.compile(regexString);
                 Matcher matcher = regex.matcher(value);
                 if(matcher.find()){
                     found = true;

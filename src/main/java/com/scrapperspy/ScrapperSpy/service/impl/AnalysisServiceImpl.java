@@ -13,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,12 +41,17 @@ public class AnalysisServiceImpl implements AnalysisService{
         String collectionName = "EXT_PRD_"+category+"_"+source;
 
         List<ExternalProduct> externalProductList = mongoTemplate.findAll(ExternalProduct.class, collectionName);
-        List<GenericRegex> genericRegexList = genericRegexRepo.findByCategory(category);
+        List<GenericRegex> genericRegexList = genericRegexRepo.findAllByCategory(category);
         Map<String, Integer> detailReport=new HashMap<>();
         int productWithAllDefining = 0;
         for(ExternalProduct externalProduct : externalProductList){
             JSONObject jsonObject = externalProduct.getProductJson();
-            List<String> valuesOfJsonObject = (List<String>) jsonObject.values();
+            Set<String> keys = jsonObject.keySet();
+            Iterator value = keys.iterator();
+            List<String> valuesOfJsonObject = new ArrayList<>();
+            while(value.hasNext() ) {
+                valuesOfJsonObject.add(jsonObject.get(value.next()).toString());
+            }
             if(isAllDefiningAvailable(valuesOfJsonObject, genericRegexList,detailReport)){
                 productWithAllDefining++;
             }
@@ -86,7 +95,8 @@ public class AnalysisServiceImpl implements AnalysisService{
     public boolean findValueInProductJson(GenericRegex genericRegex, List<String> values){
         boolean found = false;
         for(String value : values){
-            for(Pattern regex : genericRegex.getRegex()){
+            for(String regexString : genericRegex.getRegex()){
+                Pattern regex = Pattern.compile(regexString);
                 Matcher matcher = regex.matcher(value);
                 if(matcher.find()){
                     found = true;

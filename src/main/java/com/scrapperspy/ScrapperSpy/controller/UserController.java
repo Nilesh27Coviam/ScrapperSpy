@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/analyse/website/data", method = RequestMethod.GET)
-    public AnalysisReportDAO getReport(@PathVariable String source,@PathVariable String category){
+    public AnalysisReportDAO getReport(@RequestParam String source,@RequestParam String category){
         return analysisService.generateReport(category,source);
     }
 }
