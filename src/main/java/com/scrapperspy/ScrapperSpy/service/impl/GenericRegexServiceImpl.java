@@ -1,5 +1,6 @@
 package com.scrapperspy.ScrapperSpy.service.impl;
 
+import java.util.List;
 import com.scrapperspy.ScrapperSpy.dao.GenericRegexDao;
 import com.scrapperspy.ScrapperSpy.model.GenericRegex;
 import com.scrapperspy.ScrapperSpy.repository.GenericRegexRepo;
@@ -16,17 +17,20 @@ public class GenericRegexServiceImpl implements GenericRegexSerive{
     @Autowired
     GenericRegexRepo genericRegexRepo;
     @Override
-    public boolean insert(GenericRegexDao genericRegexDao) {
+    public boolean insertAll(List<GenericRegexDao> genericRegexDaoList) {
         boolean isInserted = true;
-        try{
-            GenericRegex genericRegex = new GenericRegex();
-            BeanUtils.copyProperties(genericRegex, genericRegexDao);
-            genericRegexRepo.insert(genericRegex);
-        } catch (Exception e){
-            log.error("Error occure while adding {} in GENERIC_REGEX due to {}", genericRegexDao.toString(), e);
-            isInserted = false;
-        }
 
+        for (GenericRegexDao genericRegexDao : genericRegexDaoList) {
+            try {
+                GenericRegex genericRegex = new GenericRegex();
+                BeanUtils.copyProperties(genericRegexDao, genericRegex);
+                genericRegexRepo.insert(genericRegex);
+            } catch (Exception e) {
+                log.error("Error occure while adding {} in GENERIC_REGEX due to {}",
+                    genericRegexDao.toString(), e);
+                isInserted = false;
+            }
+        }
         return isInserted;
     }
 }

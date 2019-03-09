@@ -55,7 +55,7 @@ public class AnalysisServiceImpl implements AnalysisService{
         analysisReport = analysisReportRepo.insert(analysisReport);
 
         AnalysisReportDAO analysisReportDAO = new AnalysisReportDAO();
-        BeanUtils.copyProperties(analysisReportDAO, analysisReport);
+        BeanUtils.copyProperties(analysisReport, analysisReportDAO);
 
         return analysisReportDAO;
     }

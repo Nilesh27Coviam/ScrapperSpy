@@ -1,5 +1,6 @@
 package com.scrapperspy.ScrapperSpy.controller;
 
+import java.util.List;
 import com.scrapperspy.ScrapperSpy.dao.GenericRegexDao;
 import com.scrapperspy.ScrapperSpy.service.GenericRegexSerive;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,8 @@ public class GenericRegexController {
     @Autowired
     GenericRegexSerive genericRegexSerive;
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public boolean insertGenericRegex(@RequestBody GenericRegexDao genericRegexDao){
-        return genericRegexSerive.insert(genericRegexDao);
+    @RequestMapping(value = "/insertAll", method = RequestMethod.POST)
+    public boolean insertGenericRegex(@RequestBody List<GenericRegexDao> genericRegexDaoList){
+        return genericRegexSerive.insertAll(genericRegexDaoList);
     }
 }
