@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Document(collection = CategorySourceCollection.COLLECTION_NAME)
@@ -16,5 +18,5 @@ public class CategorySourceCollection {
     private String category;
 
     @Field(value = "SOURCE")
-    private String source;
+    private List<String> sourceList;
 }
