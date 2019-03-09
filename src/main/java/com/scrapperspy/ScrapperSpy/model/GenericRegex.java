@@ -22,7 +22,7 @@ public class GenericRegex {
     private String attributeName;
 
     @Field(value = "REGEX")
-    private List<Pattern> regex;
+    private List<String> regex;
 
 
 }

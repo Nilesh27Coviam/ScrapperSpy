@@ -19,5 +19,5 @@ public class GenericRegexDao {
     private String attributeName;
 
     @Field(value = "REGEX")
-    private List<Pattern> regex;
+    private List<String> regex;
 }

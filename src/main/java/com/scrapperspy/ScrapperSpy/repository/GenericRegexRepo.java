@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface GenericRegexRepo extends MongoRepository<GenericRegex, String> {
 
-    List<GenericRegex> findByCategory(String category);
+    List<GenericRegex> findAllByCategory(String category);
 }
+

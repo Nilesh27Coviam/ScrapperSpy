@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,20 +48,17 @@ public class AnalysisServiceImpl implements AnalysisService{
         String collectionName = "EXT_PRD_"+category+"_"+source;
 
         List<ExternalProduct> externalProductList = mongoTemplate.findAll(ExternalProduct.class, collectionName);
-        List<GenericRegex> genericRegexList = genericRegexRepo.findByCategory(category);
-
+        List<GenericRegex> genericRegexList = genericRegexRepo.findAllByCategory(category);
+        Map<String, Integer> detailReport=new HashMap<>();
         int productWithAllDefining = 0;
         for(ExternalProduct externalProduct : externalProductList){
-            JSONObject jsonObRequestParamject = externalProduct.getProductJson();
-
-            Set<String> keys = jsonObRequestParamject.keySet();
-
+            JSONObject jsonObject = externalProduct.getProductJson();
+            Set<String> keys = jsonObject.keySet();
             Iterator value = keys.iterator();
             List<String> valuesOfJsonObject = new ArrayList<>();
             while(value.hasNext() ) {
-                    valuesOfJsonObject.add(jsonObRequestParamject.get(value.next()).toString());
+                valuesOfJsonObject.add(jsonObject.get(value.next()).toString());
             }
-
             if(isAllDefiningAvailable(valuesOfJsonObject, genericRegexList,detailReport)){
                 productWithAllDefining++;
             }
@@ -76,8 +75,6 @@ public class AnalysisServiceImpl implements AnalysisService{
 
         return analysisReportDAO;
     }
-
-
 
     public boolean isAllDefiningAvailable(List<String> values, List<GenericRegex> genericRegexList,Map<String,Integer> detailDataMap){
         boolean available = true;
@@ -105,7 +102,8 @@ public class AnalysisServiceImpl implements AnalysisService{
     public boolean findValueInProductJson(GenericRegex genericRegex, List<String> values){
         boolean found = false;
         for(String value : values){
-            for(Pattern regex : genericRegex.getRegex()){
+            for(String regexString : genericRegex.getRegex()){
+                Pattern regex = Pattern.compile(regexString);
                 Matcher matcher = regex.matcher(value);
                 if(matcher.find()){
                     found = true;
