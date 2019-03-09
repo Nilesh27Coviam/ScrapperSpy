@@ -8,6 +8,9 @@ public class ScrapperSpyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScrapperSpyApplication.class, args);
+		System.out.print("Initial start of code"
+			+ "");
+
 	}
 
 }
