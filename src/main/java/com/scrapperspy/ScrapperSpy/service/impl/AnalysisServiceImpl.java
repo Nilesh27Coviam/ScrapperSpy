@@ -122,11 +122,4 @@ public class AnalysisServiceImpl implements AnalysisService{
         return found;
     }
 
-
-    @Override public JSONObject getResult(String category, String source) {
-
-
-
-        return null;
-    }
 }

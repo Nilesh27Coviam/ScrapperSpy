@@ -1,6 +1,7 @@
 package com.scrapperspy.ScrapperSpy.controller;
 
 import com.scrapperspy.ScrapperSpy.dao.AnalysisReportDAO;
+import com.scrapperspy.ScrapperSpy.service.AnalysisReportCustom;
 import com.scrapperspy.ScrapperSpy.service.AnalysisService;
 import com.scrapperspy.ScrapperSpy.service.DynamicCrawler;
 import com.scrapperspy.ScrapperSpy.service.MassagerService;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -29,6 +32,10 @@ public class UserController {
 
     @Autowired
     MassagerService massagerService;
+
+    @Autowired
+    AnalysisReportCustom analysisReportCustom;
+
 
     public UserController(DynamicCrawlerConfigRepo userRepository) {
         this.userRepository = userRepository;
@@ -57,8 +64,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getprocessedresult", method = RequestMethod.GET)
-    public JSONObject getResult(@RequestParam String source,@RequestParam String category){
-        return analysisService.getResult(category,source);
+
+    public List<JSONObject> getResult(@RequestParam String source,@RequestParam String category){
+        return analysisReportCustom.getAnalysiedData(category, source);
     }
 
 }

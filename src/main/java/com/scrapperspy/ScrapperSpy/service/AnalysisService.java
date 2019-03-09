@@ -7,5 +7,4 @@ public interface AnalysisService {
 
     public AnalysisReportDAO generateReport(String category, String source);
 
-    public JSONObject getResult(String category, String source);
 }
