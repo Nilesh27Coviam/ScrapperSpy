@@ -184,16 +184,7 @@ public class DynamicCrawlerImpl implements DynamicCrawler{
         return productUrls;
     }
 
-    List<ExternalProduct>
-
-
-
-
-
-
-
-
-    extractProducts(DynamicCrawlerProductExtractionConfig extractionConfig, WebDriver webDriver) throws Exception {
+    List<ExternalProduct> extractProducts(DynamicCrawlerProductExtractionConfig extractionConfig, WebDriver webDriver) throws Exception {
         LOG.warn("Extracted events started");
         List<ExternalProduct> externalProducts = new ArrayList<>();
         List<String> variantSelectors = extractionConfig.getVariantsSelector();

@@ -3,9 +3,11 @@ package com.scrapperspy.ScrapperSpy.controller;
 import com.scrapperspy.ScrapperSpy.dao.AnalysisReportDAO;
 import com.scrapperspy.ScrapperSpy.service.AnalysisService;
 import com.scrapperspy.ScrapperSpy.service.DynamicCrawler;
+import com.scrapperspy.ScrapperSpy.service.MassagerService;
 import com.scrapperspy.ScrapperSpy.service.impl.DynamicCrawlerImpl;
 import com.scrapperspy.ScrapperSpy.model.DynamicCrawlerConfig;
 import com.scrapperspy.ScrapperSpy.repository.DynamicCrawlerConfigRepo;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class UserController {
     @Autowired
     AnalysisService analysisService;
 
+    @Autowired
+    MassagerService massagerService;
+
     public UserController(DynamicCrawlerConfigRepo userRepository) {
         this.userRepository = userRepository;
     }
@@ -42,7 +47,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/analyse/website/data", method = RequestMethod.GET)
-    public AnalysisReportDAO getReport(@PathVariable String source,@PathVariable String category){
+    public AnalysisReportDAO getReport(@RequestParam String source,@RequestParam String category){
         return analysisService.generateReport(category,source);
     }
+
+    @RequestMapping(value = "/massage/data", method = RequestMethod.GET)
+    public void MassageData (@RequestParam String source,@RequestParam String category){
+        massagerService.massageData(category,source);
+    }
+
+    @RequestMapping(value = "/getprocessedresult", method = RequestMethod.GET)
+    public JSONObject getResult(@RequestParam String source,@RequestParam String category){
+        return analysisService.getResult(category,source);
+    }
+
 }

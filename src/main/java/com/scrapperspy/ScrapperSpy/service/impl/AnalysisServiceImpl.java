@@ -7,15 +7,23 @@ import com.scrapperspy.ScrapperSpy.model.GenericRegex;
 import com.scrapperspy.ScrapperSpy.repository.AnalysisReportRepo;
 import com.scrapperspy.ScrapperSpy.repository.GenericRegexRepo;
 import com.scrapperspy.ScrapperSpy.service.AnalysisService;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +39,7 @@ public class AnalysisServiceImpl implements AnalysisService{
     @Autowired
     AnalysisReportRepo  analysisReportRepo;
 
+   public static Map<String, Integer> detailReport=new HashMap<>();
     @Override
     public AnalysisReportDAO generateReport(String category, String source) {
 
@@ -38,11 +47,19 @@ public class AnalysisServiceImpl implements AnalysisService{
 
         List<ExternalProduct> externalProductList = mongoTemplate.findAll(ExternalProduct.class, collectionName);
         List<GenericRegex> genericRegexList = genericRegexRepo.findByCategory(category);
-        Map<String, Integer> detailReport=new HashMap<>();
+
         int productWithAllDefining = 0;
         for(ExternalProduct externalProduct : externalProductList){
-            JSONObject jsonObject = externalProduct.getProductJson();
-            List<String> valuesOfJsonObject = (List<String>) jsonObject.values();
+            JSONObject jsonObRequestParamject = externalProduct.getProductJson();
+
+            Set<String> keys = jsonObRequestParamject.keySet();
+
+            Iterator value = keys.iterator();
+            List<String> valuesOfJsonObject = new ArrayList<>();
+            while(value.hasNext() ) {
+                    valuesOfJsonObject.add(jsonObRequestParamject.get(value.next()).toString());
+            }
+
             if(isAllDefiningAvailable(valuesOfJsonObject, genericRegexList,detailReport)){
                 productWithAllDefining++;
             }
@@ -59,6 +76,8 @@ public class AnalysisServiceImpl implements AnalysisService{
 
         return analysisReportDAO;
     }
+
+
 
     public boolean isAllDefiningAvailable(List<String> values, List<GenericRegex> genericRegexList,Map<String,Integer> detailDataMap){
         boolean available = true;
@@ -98,5 +117,13 @@ public class AnalysisServiceImpl implements AnalysisService{
             }
         }
         return found;
+    }
+
+
+    @Override public JSONObject getResult(String category, String source) {
+
+
+
+        return null;
     }
 }

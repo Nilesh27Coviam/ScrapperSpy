@@ -27,6 +27,26 @@ public class FieldNames {
     public static final String PRODUCT_URL = "PRODUCT_URL";
     public static final String PRODUCT_NAME = "PRODUCT_NAME";
     public static final String EXTRA_INFO = "EXTRA_INFO";
+    public static final String ATTRIBUTE_NAME = "ATTRIBUTE_NAME";
+    public static final String FIELD_NAME = "FIELD_NAME";
+    public static final String PRIORITY = "PRIORITY";
+    public static final String LOOKUP_KEY = "LOOKUP_KEY";
+    public static final String LOOKUP_REGEX = "LOOKUP_REGEX";
+    public static final String TRANSFORMATION_REGEX = "TRANSFORMATION_REGEX";
+    public static final String CUSTOM_CLASS = "CUSTOM_CLASS";
+    public static final String DEFAULT_VALUE = "DEFAULT_VALUE";
+    public static final String TRANSFORMATION_CALLS = "TRANSFORMATION_CALLS";
+    public static final String REPLACEMENT_MAP = "REPLACEMENT_MAP";
+    public static final String IS_SYNONYM_PRESENT = "IS_SYNONYM_PRESENT";
+    public static final String MULTI_VALUE_SEPARATOR = "MULTI_VALUE_SEPARATOR";
+    public static final String IS_INVALID_CHECK = "IS_INVALID_CHECK";
+    public static final String IS_REPLACEMENT_NEEDED = "IS_REPLACEMENT_NEEDED";
+    public static final String MASSAGER_PROCESS = "MASSAGER_PROCESS";
+    public static final String EXTRACTION_LOGIC = "EXTRACTION_LOGIC";
+
+
+
+
 
 
 }
