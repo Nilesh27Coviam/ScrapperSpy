@@ -32,6 +32,4 @@ public class AnalysisReport {
 
     @Field(value = "DETAILED_REPORT")
     private Map detaildReport;
-
-
 }
