@@ -48,7 +48,8 @@ public class AnalysisReportCustomImpl implements AnalysisReportCustom {
                     Set<String> keys = analysisReport.getDetaildReport().keySet();
                     for (String key : keys) {
                         JSONObject innnerObj = new JSONObject();
-                        innnerObj.put(key, analysisReport.getDetaildReport().get(key));
+                        innnerObj.put("key",key);
+                        innnerObj.put("value", analysisReport.getDetaildReport().get(key));
                         data.add(innnerObj);
                     }
                     responceObj.put("DATA", data);
