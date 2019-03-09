@@ -63,11 +63,16 @@ public class AnalysisServiceImpl implements AnalysisService{
                 .detaildReport(detailReport).build();
         analysisReport = analysisReportRepo.insert(analysisReport);
 
+        float totalProductCount = analysisReport.getTotalCrawlProduct();
+        float definingAttributeCount = analysisReport.getCountWithAllDefining();
         AnalysisReportDAO analysisReportDAO = new AnalysisReportDAO();
         BeanUtils.copyProperties(analysisReport, analysisReportDAO);
+        analysisReportDAO.setPercentage((definingAttributeCount/totalProductCount)*100);
 
         return analysisReportDAO;
     }
+
+
 
     public boolean isAllDefiningAvailable(List<String> values, List<GenericRegex> genericRegexList,Map<String,Integer> detailDataMap){
         boolean available = true;
