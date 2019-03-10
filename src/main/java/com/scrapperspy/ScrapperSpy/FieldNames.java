@@ -43,6 +43,8 @@ public class FieldNames {
     public static final String IS_REPLACEMENT_NEEDED = "IS_REPLACEMENT_NEEDED";
     public static final String MASSAGER_PROCESS = "MASSAGER_PROCESS";
     public static final String EXTRACTION_LOGIC = "EXTRACTION_LOGIC";
+    public static final String BRAND = "BRAND";
+    public static final String MODEL = "MODEL";
 
 
 

@@ -23,11 +23,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service public class MassagerConfigServiceImpl implements MassagerService {
+@Service
+public class MassagerConfigServiceImpl implements MassagerService {
 
-    @Autowired MongoTemplate mongoTemplate;
+    @Autowired
+    MongoTemplate mongoTemplate;
 
-    @Autowired MassagerConfigRepo massagerConfigRepo;
+    @Autowired
+    MassagerConfigRepo massagerConfigRepo;
+
+    @Autowired
+    BrandModelExtractor brandModelExtractor;
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
@@ -102,6 +108,11 @@ import java.util.regex.Pattern;
 
                     if (CollectionUtils.isNotEmpty(value)) {
                         extractedValue = value.get(0);
+                    }
+                    break;
+                case "CUSTOM":
+                    if (null == model.get(attributeName)) {
+                        model = brandModelExtractor.findAttributeValue(externalProduct, massagerConfig, model);
                     }
                     break;
                 case "EXTRA_INFO":
