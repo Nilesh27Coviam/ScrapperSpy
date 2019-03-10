@@ -26,7 +26,4 @@ public class AnalysisReportDAO {
 
     @Field(value = "PERCENTAGE")
     private float percentage;
-
-    @Field(value = "TEST")
-    private String test;
 }

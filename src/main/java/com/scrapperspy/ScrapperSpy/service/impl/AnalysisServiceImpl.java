@@ -7,25 +7,16 @@ import com.scrapperspy.ScrapperSpy.model.GenericRegex;
 import com.scrapperspy.ScrapperSpy.repository.AnalysisReportRepo;
 import com.scrapperspy.ScrapperSpy.repository.GenericRegexRepo;
 import com.scrapperspy.ScrapperSpy.service.AnalysisService;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import sun.rmi.runtime.Log;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +36,10 @@ public class AnalysisServiceImpl implements AnalysisService{
     @Override
     public AnalysisReportDAO generateReport(String category, String source) {
 
+        Update update1 = new Update();
+        update1.set("REGEX", Arrays.asList("(?i)((\\d+(\\.\\d+)?)\\s*(\\\"|\\-)?\\s*(Inches|inch|Inci|inc)?|(\\d+(\\.\\d+)?)\\s*(fhd|qhd|qled|led|hd)|(\\d+(\\.\\d+)?)\"|^(\\d+(\\.\\d+)?)$)"));
+        mongoTemplate.updateFirst(new Query(Criteria.where("ATTRIBUTE_NAME").is("SCREEN_SIZE").and("CATEGORY").is("COMPUTER")),update1,"GENERIC_REGEX");
+
         String collectionName = "EXT_PRD_"+category+"_"+source;
 
         List<ExternalProduct> externalProductList = mongoTemplate.findAll(ExternalProduct.class, collectionName);
@@ -63,18 +58,38 @@ public class AnalysisServiceImpl implements AnalysisService{
                 productWithAllDefining++;
             }
         }
-        AnalysisReport analysisReport = AnalysisReport.builder()
-                .category(category).source(source)
-                .totalCrawlProduct(externalProductList.size())
-                .countWithAllDefining(productWithAllDefining)
-                .detaildReport(detailReport).build();
-        analysisReport = analysisReportRepo.insert(analysisReport);
+        AnalysisReport analysisReport;
+        Boolean isUpdate = false;
+        if(analysisReportRepo.findByCategoryAndSource(category, source).size() == 0){
+            analysisReport = new AnalysisReport();
+        } else {
+            analysisReport = analysisReportRepo.findByCategoryAndSource(category, source).get(0);
+            isUpdate = true;
+        }
+
+        analysisReport.setCategory(category);
+        analysisReport.setSource(source);
+        analysisReport.setTotalCrawlProduct(externalProductList.size());
+        analysisReport.setCountWithAllDefining(productWithAllDefining);
+        analysisReport.setDetaildReport(detailReport);
 
         float totalProductCount = analysisReport.getTotalCrawlProduct();
         float definingAttributeCount = analysisReport.getCountWithAllDefining();
+        analysisReport.setPercentage((definingAttributeCount/totalProductCount)*100);
+        if(isUpdate){
+            Query query = new Query(Criteria.where("CATEGORY").is(category).and("SOURCE").is(source));
+            Update update = new Update();
+            update.set("TOTAL_CRAWL_PRODUCT", analysisReport.getTotalCrawlProduct());
+            update.set("COUNT_WITH_ALL_DEFINING", analysisReport.getCountWithAllDefining());
+            update.set("DETAILED_REPORT", analysisReport.getDetaildReport());
+            update.set("PERCENTAGE", analysisReport.getPercentage());
+            mongoTemplate.updateFirst(query, update, AnalysisReport.COLLECTION_NAME);
+        } else {
+            analysisReportRepo.save(analysisReport);
+        }
+
         AnalysisReportDAO analysisReportDAO = new AnalysisReportDAO();
         BeanUtils.copyProperties(analysisReport, analysisReportDAO);
-        analysisReportDAO.setPercentage((definingAttributeCount/totalProductCount)*100);
 
         return analysisReportDAO;
     }

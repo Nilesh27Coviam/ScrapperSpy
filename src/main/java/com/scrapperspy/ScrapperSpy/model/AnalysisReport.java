@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,8 +13,9 @@ import java.util.Map;
 
 @Setter
 @Getter
-@Builder
 @Document(collection = AnalysisReport.COLLECTION_NAME)
+@CompoundIndex(name = "PRISTINE_CATEGORY_AND_SOURCE_AND_ORDER",
+        def = "{'CATEGORY' : 1, " + "'SOURCE' : 1}", unique = true)
 public class AnalysisReport {
 
     public static final String COLLECTION_NAME = "ANALYSIS_REPORT";
@@ -32,4 +34,7 @@ public class AnalysisReport {
 
     @Field(value = "DETAILED_REPORT")
     private Map detaildReport;
+
+    @Field(value = "PERCENTAGE")
+    private float percentage;
 }

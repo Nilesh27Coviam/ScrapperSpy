@@ -44,11 +44,17 @@ public class AnalysisReportCustomImpl implements AnalysisReportCustom {
 
                     responceObj.put("SOURCE", analysisReport.getSource());
                     responceObj.put("CATEGORY", analysisReport.getCategory());
+                    responceObj.put("TOTALCRAWLPRODUCT", analysisReport.getTotalCrawlProduct());
+                    responceObj.put("COUNTWITHALLDEFINING", analysisReport.getCountWithAllDefining());
+                    float totalProductCount = analysisReport.getTotalCrawlProduct();
+                    float definingAttributeCount = analysisReport.getCountWithAllDefining();
+                    analysisReport.setPercentage((definingAttributeCount/totalProductCount)*100);
+                    responceObj.put("PERCENTAGE", analysisReport.getPercentage());
                     List<JSONObject> data = new ArrayList<>();
                     Set<String> keys = analysisReport.getDetaildReport().keySet();
                     for (String key : keys) {
                         JSONObject innnerObj = new JSONObject();
-                        innnerObj.put("key",key);
+                        innnerObj.put("label",key);
                         innnerObj.put("value", analysisReport.getDetaildReport().get(key));
                         data.add(innnerObj);
                     }
